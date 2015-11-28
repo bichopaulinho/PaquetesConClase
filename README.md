@@ -1,2 +1,4 @@
 # PaquetesConClase
-Material para la presentación en el grupo de usuarios R de Madrid
+## *Un Crash-course sobre interfaces de C++ en R* ###
+### Grupo de Usuarios R de Madrid ###
+### 10/12/2015 ###
