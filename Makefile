@@ -14,7 +14,7 @@
 
 
 
-
+# Como hacer el makefile: https://www.safaribooksonline.com/library/view/c-cookbook/0596007612/ch01s17.html
 # Specify extensions of files to delete when cleaning
 CLEANEXTS   = o a 
 
@@ -22,7 +22,8 @@ CLEANEXTS   = o a
 OUTPUTFILE  = libRandomSearch.a
 
 objects = ObjectiveFunction.o OptimizationAlgorithm.o RandomSearch.o
-
+CXXFLAGS = -fPIC -Wall
+CXX=g++
 # Default target
 .PHONY: all
 all: $(OUTPUTFILE)
@@ -32,14 +33,14 @@ $(OUTPUTFILE): $(objects)
 
  
 ObjectiveFunction.o: ./Purple/ObjectiveFunction/ObjectiveFunction.cpp
-	g++ -c ./Purple/ObjectiveFunction/ObjectiveFunction.cpp -o  ObjectiveFunction.o
+	$(CXX) $(CXXFLAGS) -c ./Purple/ObjectiveFunction/ObjectiveFunction.cpp -o  ObjectiveFunction.o
 
 
 OptimizationAlgorithm.o: ./Purple/OptimizationAlgorithm/OptimizationAlgorithm.cpp
-	g++ -c ./Purple/OptimizationAlgorithm/OptimizationAlgorithm.cpp -o  OptimizationAlgorithm.o
+	$(CXX) $(CXXFLAGS) -c ./Purple/OptimizationAlgorithm/OptimizationAlgorithm.cpp -o  OptimizationAlgorithm.o
 
 RandomSearch.o: ./Purple/OptimizationAlgorithm/RandomSearch.cpp
-	g++ -c ./Purple/OptimizationAlgorithm/RandomSearch.cpp -o RandomSearch.o
+	$(CXX) $(CXXFLAGS) -c ./Purple/OptimizationAlgorithm/RandomSearch.cpp -o RandomSearch.o
 
 # files is required; this is handled by make's database of
 # implicit rules
