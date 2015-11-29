@@ -17,6 +17,7 @@
 #include <math.h>
 #include <sstream>
 #include <stdexcept>
+#include <stdlib.h>
 
 namespace Purple
 {

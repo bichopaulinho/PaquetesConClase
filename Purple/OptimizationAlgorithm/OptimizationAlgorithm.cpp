@@ -13,6 +13,7 @@
 #include<iostream>
 
 #include "OptimizationAlgorithm.h"
+#include <stdlib.h>
 
 namespace Purple
 {
