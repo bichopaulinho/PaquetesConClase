@@ -19,9 +19,9 @@
 CLEANEXTS   = o a 
 
 # Specify the target file and the install directory
-OUTPUTFILE  = libRandomSearch.a
+OUTPUTFILE  = ./lib/libRandomSearch.a
 
-objects = ObjectiveFunction.o OptimizationAlgorithm.o RandomSearch.o
+objects = ./Purple/bin/ObjectiveFunction.o ./Purple/bin/OptimizationAlgorithm.o ./Purple/bin/RandomSearch.o
 CXXFLAGS = -fPIC -Wall
 CXX=g++
 # Default target
@@ -32,22 +32,22 @@ $(OUTPUTFILE): $(objects)
 	ar rcs $@ $^
 
  
-ObjectiveFunction.o: ./Purple/ObjectiveFunction/ObjectiveFunction.cpp
-	$(CXX) $(CXXFLAGS) -c ./Purple/ObjectiveFunction/ObjectiveFunction.cpp -o  ObjectiveFunction.o
+./Purple/bin/ObjectiveFunction.o: ./Purple/ObjectiveFunction/ObjectiveFunction.cpp
+	$(CXX) $(CXXFLAGS) -c ./Purple/ObjectiveFunction/ObjectiveFunction.cpp -o  ./Purple/bin/ObjectiveFunction.o
 
 
-OptimizationAlgorithm.o: ./Purple/OptimizationAlgorithm/OptimizationAlgorithm.cpp
-	$(CXX) $(CXXFLAGS) -c ./Purple/OptimizationAlgorithm/OptimizationAlgorithm.cpp -o  OptimizationAlgorithm.o
+./Purple/bin/OptimizationAlgorithm.o: ./Purple/OptimizationAlgorithm/OptimizationAlgorithm.cpp
+	$(CXX) $(CXXFLAGS) -c ./Purple/OptimizationAlgorithm/OptimizationAlgorithm.cpp -o  ./Purple/bin/OptimizationAlgorithm.o
 
-RandomSearch.o: ./Purple/OptimizationAlgorithm/RandomSearch.cpp
-	$(CXX) $(CXXFLAGS) -c ./Purple/OptimizationAlgorithm/RandomSearch.cpp -o RandomSearch.o
+./Purple/bin/RandomSearch.o: ./Purple/OptimizationAlgorithm/RandomSearch.cpp
+	$(CXX) $(CXXFLAGS) -c ./Purple/OptimizationAlgorithm/RandomSearch.cpp -o ./Purple/bin/RandomSearch.o
 
 # files is required; this is handled by make's database of
 # implicit rules
 
 .PHONY: clean 
 clean:
-	for file in $(CLEANEXTS); do rm -f *.$$file; done
+	for file in $(CLEANEXTS); do rm -f ./lib/*.$$file; rm -f ./Purple/bin/*.$$file; done
 
 
 
