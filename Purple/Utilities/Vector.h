@@ -63,10 +63,10 @@ public:
 
    // METHODS
 
-   inline int getSize();
+   inline int getSize() const;
 
-   inline Type* begin();
-   inline Type* end();
+   inline Type* begin()const ;
+   inline Type* end() const;
 
 
    // DESTRUCTOR
@@ -204,7 +204,7 @@ inline const Type& Vector<Type>::operator[](const int i) const
 /// This method returns the number of elements in the vector. 
 
 template <typename Type>
-inline int Vector<Type>::getSize()
+inline int Vector<Type>::getSize() const
 {
    return(size);
 }
@@ -215,7 +215,7 @@ inline int Vector<Type>::getSize()
 /// This method returns a pointer to the first element in the container.
 
 template <typename Type>
-inline Type* Vector<Type>::begin()
+inline Type* Vector<Type>::begin() const
 {
    return(vector);
 }
@@ -226,7 +226,7 @@ inline Type* Vector<Type>::begin()
 /// This method returns a pointer to the last element in the container. 
 
 template <typename Type>
-inline Type* Vector<Type>::end()
+inline Type* Vector<Type>::end() const
 {
    return(vector + size);
 }

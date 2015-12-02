@@ -7,7 +7,7 @@
 //We start with the forward declarations:
 namespace Rcpp{
 // conversion from C++ to R
-template <> SEXP wrap(const Purple::Vector& vc);
+template <> SEXP wrap(const Purple::Vector<double>& vc);
 }
 #endif
 

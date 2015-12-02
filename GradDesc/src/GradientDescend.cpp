@@ -1,13 +1,13 @@
-
+#include "wrap_purple_vector.h"
 #include <Rcpp.h>
 #include "ObjectiveFunction/DeJongFunction.h"
-#include "OptimizationAlgorithm/Gradient.h"
+#include "OptimizationAlgorithm/GradientDescent.h"
 
 #include <iostream>
 #include <time.h>
 #include <stdexcept>
 
-using namespace Rcpp;
+//using namespace Rcpp;
 using namespace Purple;
 
 
@@ -16,7 +16,7 @@ using namespace Purple;
 //' @export
 //' @useDynLib GradDesc
 // [[Rcpp::export]]
-NumericVector PruebaGradientDescend() {
+Rcpp::NumericVector PruebaGradientDescend() {
 
 
     // De Jong function object

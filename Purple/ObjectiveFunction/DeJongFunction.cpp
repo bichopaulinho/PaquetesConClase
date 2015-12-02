@@ -14,6 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
+#include <stdlib.h>
 
 #include "DeJongFunction.h"
 

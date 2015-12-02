@@ -21,7 +21,7 @@ CLEANEXTS   = o a
 # Specify the target file and the install directory
 OUTPUTFILE  = ./lib/libRandomSearch.a
 
-objects = ./Purple/bin/ObjectiveFunction.o ./Purple/bin/OptimizationAlgorithm.o ./Purple/bin/RandomSearch.o
+objects = ./Purple/bin/ObjectiveFunction.o ./Purple/bin/OptimizationAlgorithm.o ./Purple/bin/RandomSearch.o ./Purple/bin/OptimizationAlgorithm/GradientDescent.o ./Purple/bin/ObjectiveFunction/DeJongFunction.o
 CXXFLAGS = -fPIC -Wall
 CXX=g++
 # Default target
@@ -41,6 +41,12 @@ $(OUTPUTFILE): $(objects)
 
 ./Purple/bin/RandomSearch.o: ./Purple/OptimizationAlgorithm/RandomSearch.cpp
 	$(CXX) $(CXXFLAGS) -c ./Purple/OptimizationAlgorithm/RandomSearch.cpp -o ./Purple/bin/RandomSearch.o
+
+./Purple/bin/OptimizationAlgorithm/GradientDescent.o: ./Purple/OptimizationAlgorithm/GradientDescent.cpp
+	$(CXX) $(CXXFLAGS) -c ./Purple/OptimizationAlgorithm/GradientDescent.cpp -o ./Purple/bin/OptimizationAlgorithm/GradientDescent.o
+
+./Purple/bin/ObjectiveFunction/DeJongFunction.o: ./Purple/ObjectiveFunction/DeJongFunction.cpp
+	$(CXX) $(CXXFLAGS) -c ./Purple/ObjectiveFunction/DeJongFunction.cpp -o ./Purple/bin/ObjectiveFunction/DeJongFunction.o
 
 # files is required; this is handled by make's database of
 # implicit rules

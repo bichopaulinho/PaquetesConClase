@@ -5,6 +5,16 @@
 
 using namespace Rcpp;
 
+// PruebaGradientDescend
+Rcpp::NumericVector PruebaGradientDescend();
+RcppExport SEXP GradDesc_PruebaGradientDescend() {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    __result = Rcpp::wrap(PruebaGradientDescend());
+    return __result;
+END_RCPP
+}
 // rcpp_hello
 List rcpp_hello();
 RcppExport SEXP GradDesc_rcpp_hello() {
