@@ -30,8 +30,8 @@ SumaCuadrados::SumaCuadrados(const Vector<double> y, const Matrix<double> X)
 
     numberOfVariables = X.getNumberOfColumns();
 
-    Matrix<double> ModelMatrix(X);
-    Vector<double> TargetVariable(y);
+    ModelMatrix(X);
+    TargetVariable(y);
 
 }
 
@@ -58,20 +58,24 @@ double SumaCuadrados::getEvaluation(Vector<double> argument)
     Vector<double> PredictedValues(TargetVariable.getSize());
 
     // tbc
+    error = (ModelMatrix * vector - TargetVariable);
+    error*=error;
 
     // suma de cuadrados
-    double ss=0.0;
+    double ss=sum(error);
 
     //tbc
-
     return ss;
-
 }
 
 // getModelMatrix
 Matrix<double> SumaCuadrados::getModelMatrix(void)
 {
     return(ModelMatrix);
+}
+
+Vector<double> SumaCuadrados::getGradient(Vector<double> vector) {
+	return 2*transpose(ModelMatrix)*(ModelMatrix * vector - TargetVariable);
 }
 
 // getTargetVariable

@@ -38,6 +38,7 @@ public:
     // Objective function methods
 
     double getEvaluation(Vector<double>);
+    virtual Vector<double> getGradient(Vector<double>);
 
     Matrix<double> getModelMatrix(void);
     Vector<double> getTargetVariable(void);
