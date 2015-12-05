@@ -19,9 +19,9 @@
 CLEANEXTS   = o a 
 
 # Specify the target file and the install directory
-OUTPUTFILE  = ./lib/libRandomSearch.a
+OUTPUTFILE  = ./lib/libPurple.a
 
-objects = ./Purple/bin/ObjectiveFunction.o ./Purple/bin/OptimizationAlgorithm.o ./Purple/bin/RandomSearch.o ./Purple/bin/GradientDescent.o ./Purple/bin/DeJongFunction.o
+objects = ./Purple/bin/ObjectiveFunction.o ./Purple/bin/OptimizationAlgorithm.o ./Purple/bin/RandomSearch.o ./Purple/bin/GradientDescent.o ./Purple/bin/DeJongFunction.o ./Purple/bin/SumaCuadrados.o
 CXXFLAGS = -fPIC -Wall
 CXX=g++
 # Default target
@@ -35,7 +35,6 @@ $(OUTPUTFILE): $(objects)
 ./Purple/bin/ObjectiveFunction.o: ./Purple/ObjectiveFunction/ObjectiveFunction.cpp
 	$(CXX) $(CXXFLAGS) -c ./Purple/ObjectiveFunction/ObjectiveFunction.cpp -o  ./Purple/bin/ObjectiveFunction.o
 
-
 ./Purple/bin/OptimizationAlgorithm.o: ./Purple/OptimizationAlgorithm/OptimizationAlgorithm.cpp
 	$(CXX) $(CXXFLAGS) -c ./Purple/OptimizationAlgorithm/OptimizationAlgorithm.cpp -o  ./Purple/bin/OptimizationAlgorithm.o
 
@@ -47,6 +46,9 @@ $(OUTPUTFILE): $(objects)
 
 ./Purple/bin/DeJongFunction.o: ./Purple/ObjectiveFunction/DeJongFunction.cpp
 	$(CXX) $(CXXFLAGS) -c ./Purple/ObjectiveFunction/DeJongFunction.cpp -o ./Purple/bin/DeJongFunction.o
+
+./Purple/bin/SumaCuadrados.o: ./Purple/ObjectiveFunction/SumaCuadrados.cpp
+	$(CXX) $(CXXFLAGS) -c ./Purple/ObjectiveFunction/SumaCuadrados.cpp -o ./Purple/bin/SumaCuadrados.o
 
 # files is required; this is handled by make's database of
 # implicit rules

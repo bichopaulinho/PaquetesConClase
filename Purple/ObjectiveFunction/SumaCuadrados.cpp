@@ -17,7 +17,7 @@ SumaCuadrados::SumaCuadrados(void): ObjectiveFunction()
 
 }
 
-SumaCuadrados::SumaCuadrados(const Vector<double> y, const Matrix<double> X)
+SumaCuadrados::SumaCuadrados(const Vector<double> y, const Matrix<double> X) : ModelMatrix(X),TargetVariable(y)
 {
     if (X.getNumberOfRows() != y.getSize()){
 
@@ -29,9 +29,6 @@ SumaCuadrados::SumaCuadrados(const Vector<double> y, const Matrix<double> X)
     }
 
     numberOfVariables = X.getNumberOfColumns();
-
-    ModelMatrix(X);
-    TargetVariable(y);
 
 }
 
@@ -55,17 +52,32 @@ double SumaCuadrados::getEvaluation(Vector<double> argument)
     }
 
     // valores estimados en la regresión
-    Vector<double> PredictedValues(TargetVariable.getSize());
 
+    Vector<double> res = Residuals(argument);
     // tbc
-    error = (ModelMatrix * vector - TargetVariable);
-    error*=error;
 
-    // suma de cuadrados
-    double ss=sum(error);
+
+    // error = sum(error^2)
+    double error = 0;
+    for (int irow=0;irow<ModelMatrix.getNumberOfRows();irow++){
+    	error+=res[irow]*res[irow];
+    }
 
     //tbc
-    return ss;
+    return error;
+}
+Vector<double> SumaCuadrados::Residuals(const Vector<double> & argument){
+    // error = (ModelMatrix * vector - TargetVariable);
+	Vector<double> res(TargetVariable.getSize());
+
+    for(int irow = 0;irow<ModelMatrix.getNumberOfRows();irow++){
+    	res[irow] = -TargetVariable[irow];
+    	for(int jcol=0;jcol<ModelMatrix.getNumberOfColumns();jcol++){
+    		res[irow]+=ModelMatrix[irow][jcol]*argument[jcol];
+    	}
+    }
+    return res;
+
 }
 
 // getModelMatrix
@@ -74,8 +86,18 @@ Matrix<double> SumaCuadrados::getModelMatrix(void)
     return(ModelMatrix);
 }
 
-Vector<double> SumaCuadrados::getGradient(Vector<double> vector) {
-	return 2*transpose(ModelMatrix)*(ModelMatrix * vector - TargetVariable);
+Vector<double> SumaCuadrados::getGradient(Vector<double> argument) {
+	//return 2*transpose(ModelMatrix)*(res);
+	Vector<double> salida(argument.getSize());
+	Vector<double> res = Residuals(argument);
+
+	for(int icol = 0;icol<ModelMatrix.getNumberOfColumns();icol++){
+    	salida[icol] = 0;
+    	for(int jrow=0;jrow<ModelMatrix.getNumberOfRows();jrow++){
+    		salida[icol]+=2*ModelMatrix[jrow][icol]*res[jrow];
+    	}
+    }
+	return salida;
 }
 
 // getTargetVariable

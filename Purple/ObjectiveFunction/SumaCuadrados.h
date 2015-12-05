@@ -15,9 +15,10 @@ namespace Purple
 class SumaCuadrados : public ObjectiveFunction
 {
 
-protected:
+private:
     Matrix<double> ModelMatrix;
     Vector<double> TargetVariable;
+    Vector<double> Residuals(const Vector<double> & v);
 
 public:
 
