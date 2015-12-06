@@ -1,4 +1,4 @@
-#include "purple_vector.h"
+#include "purple_wrappers.h"
 #include <Rcpp.h>
 #include "ObjectiveFunction/SumaCuadrados.h"
 #include "OptimizationAlgorithm/GradientDescent.h"
@@ -8,30 +8,27 @@
 #include <stdexcept>
 
 using namespace Rcpp;
-//using namespace Purple;
 
 
-//' PruebaGradientDescent
+//' GradientDescentSumaCuadrados
+//'
+//' @param A Matriz con regresores
+//' @param b Vector objetivo
+//'
+//' @detail
 //'
 //' @export
 //' @useDynLib GradDesc
 // [[Rcpp::export]]
-Rcpp::NumericVector GradientDescentSumaCuadrados(Rcpp::NumericMatrix & A,SEXP b) {
+Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A,SEXP b) {
 
     // Copiamos el vector b
     Purple::Vector<double> M_b = Rcpp::as<Purple::Vector<double>>(b);
-
-    int ncol = A.ncol();
-    int nrow = A.nrow();
+    Purple::Matrix<double> M_A = Rcpp::as<Purple::Matrix<double>>(A);
+    int ncol = M_A.getNumberOfColumns();
+    int nrow = M_A.getNumberOfRows();
     if (M_b.getSize() != nrow){
         Rcpp::stop("El vector b tiene que tener la misma longitud que las filas de A");
-    }
-
-    // Copiamos la matriz A
-    Purple::Matrix<double> M_A(nrow,ncol);
-    for (int i = 0;i<nrow;i++){
-        Rcpp::NumericMatrix::Row Arow = A(i, _);
-        std::copy(Arow.begin(),Arow.end(),M_A[i]);
     }
 
 

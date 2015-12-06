@@ -6,12 +6,12 @@
 using namespace Rcpp;
 
 // GradientDescentSumaCuadrados
-Rcpp::NumericVector GradientDescentSumaCuadrados(Rcpp::NumericMatrix& A, SEXP b);
+Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A, SEXP b);
 RcppExport SEXP GradDesc_GradientDescentSumaCuadrados(SEXP ASEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< SEXP >::type A(ASEXP);
     Rcpp::traits::input_parameter< SEXP >::type b(bSEXP);
     __result = Rcpp::wrap(GradientDescentSumaCuadrados(A, b));
     return __result;
