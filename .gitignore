@@ -59,6 +59,8 @@ $RECYCLE.BIN/
 
 *.o
 *.so
+*.lib
+*.dll
 
 # Carpeta Purple0
 Purple0/

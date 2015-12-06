@@ -43,7 +43,7 @@ Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A,SEXP b) {
 
     gradientDescent.setEvaluationGoal(0.0);
     gradientDescent.setGradientNormGoal(1.0e-6);
-    gradientDescent.setMaximumNumberOfIterations(100);
+    gradientDescent.setMaximumNumberOfIterations(1000);
     gradientDescent.setMaximumTime(1000.0);
 
     gradientDescent.setShowPeriod(10);
@@ -52,7 +52,7 @@ Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A,SEXP b) {
 
     gradientDescent.setInitialArgument(initialArgument);
 
-    gradientDescent.print();
+    //gradientDescent.print();
 
     //gradientDescent.save("GradientDescent.dat");
 
