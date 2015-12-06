@@ -57,6 +57,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+*.o
+*.so
+
 # Carpeta Purple0
 Purple0/
 MiPurple/
