@@ -5,13 +5,15 @@
 
 using namespace Rcpp;
 
-// PruebaGradientDescent
-Rcpp::NumericVector PruebaGradientDescent();
-RcppExport SEXP GradDesc_PruebaGradientDescent() {
+// GradientDescentSumaCuadrados
+Rcpp::NumericVector GradientDescentSumaCuadrados(Rcpp::NumericMatrix& A, const Rcpp::NumericVector& b);
+RcppExport SEXP GradDesc_GradientDescentSumaCuadrados(SEXP ASEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    __result = Rcpp::wrap(PruebaGradientDescent());
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type b(bSEXP);
+    __result = Rcpp::wrap(GradientDescentSumaCuadrados(A, b));
     return __result;
 END_RCPP
 }

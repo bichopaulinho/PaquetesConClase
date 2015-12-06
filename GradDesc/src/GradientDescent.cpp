@@ -1,6 +1,5 @@
 #include "wrap_purple_vector.h"
 #include <Rcpp.h>
-#include "ObjectiveFunction/DeJongFunction.h"
 #include "ObjectiveFunction/SumaCuadrados.h"
 #include "OptimizationAlgorithm/GradientDescent.h"
 
@@ -8,8 +7,8 @@
 #include <time.h>
 #include <stdexcept>
 
-//using namespace Rcpp;
-using namespace Purple;
+using namespace Rcpp;
+//using namespace Purple;
 
 
 //' PruebaGradientDescent
@@ -17,54 +16,54 @@ using namespace Purple;
 //' @export
 //' @useDynLib GradDesc
 // [[Rcpp::export]]
-Rcpp::NumericVector PruebaGradientDescent() {
+Rcpp::NumericVector GradientDescentSumaCuadrados(Rcpp::NumericMatrix & A,const Rcpp::NumericVector & b) {
 
+    int ncol = A.ncol();
+    int nrow = A.nrow();
+    if (b.size() != nrow){
+        Rcpp::stop("El vector b tiene que tener la misma longitud que las filas de A");
+    }
 
-    // De Jong function object
+    // Copiamos la matriz A
+    Purple::Matrix<double> M_A(nrow,ncol);
+    for (int i = 0;i<nrow;i++){
+        Rcpp::NumericMatrix::Row Arow = A(i, _);
+        std::copy(Arow.begin(),Arow.end(),M_A[i]);
+    }
 
-    DeJongFunction deJongFunction;
+    // Copiamos el vector b
+    Purple::Vector<double> M_b(b.size());
+    std::copy(b.begin(),b.end(),M_b.begin());
 
-    int numberOfVariables = 3;
-
-    deJongFunction.setNumberOfVariables(numberOfVariables);
-
-    Vector<double> lowerBound(numberOfVariables, -5.12);
-    Vector<double> upperBound(numberOfVariables, -5.12);
-
-    deJongFunction.setLowerBound(lowerBound);
-    deJongFunction.setUpperBound(upperBound);
-
+    Purple::SumaCuadrados funcion_objetivo(M_b,M_A);
     // Gradient descent object
 
-    GradientDescent gradientDescent(&deJongFunction);
+    Purple::GradientDescent gradientDescent(&funcion_objetivo);
 
-    gradientDescent.setOptimalStepSizeMethod(GradientDescent::BrentMethod);
+    gradientDescent.setOptimalStepSizeMethod(Purple::GradientDescent::BrentMethod);
 
     gradientDescent.setOptimalStepSizeTolerance(1.0e-6);
 
     gradientDescent.setEvaluationGoal(0.0);
-    gradientDescent.setGradientNormGoal(0.0);
+    gradientDescent.setGradientNormGoal(1.0e-6);
     gradientDescent.setMaximumNumberOfIterations(100);
     gradientDescent.setMaximumTime(1000.0);
 
     gradientDescent.setShowPeriod(10);
 
-    Vector<double> initialArgument(numberOfVariables, 1.0);
+    Purple::Vector<double> initialArgument(ncol, 1.0);
 
     gradientDescent.setInitialArgument(initialArgument);
 
     gradientDescent.print();
 
-    gradientDescent.save("GradientDescent.dat");
+    //gradientDescent.save("GradientDescent.dat");
 
-    Vector<double> minimalArgument = gradientDescent.getMinimalArgument();
+    Purple::Vector<double> minimalArgument = gradientDescent.getMinimalArgument();
 
-    gradientDescent
-        .saveOptimizationHistory("OptimizationHistory.dat");
+    //gradientDescent
+    //    .saveOptimizationHistory("OptimizationHistory.dat");
 
-    std::cout << std::endl;
 
-    //return(0);
     return(Rcpp::wrap<Purple::Vector<double>>(minimalArgument));
-
 }

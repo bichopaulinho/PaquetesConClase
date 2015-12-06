@@ -5,7 +5,7 @@
 #'
 #' @export
 #' @useDynLib GradDesc
-PruebaGradientDescent <- function() {
-    .Call('GradDesc_PruebaGradientDescent', PACKAGE = 'GradDesc')
+GradientDescentSumaCuadrados <- function(A, b) {
+    .Call('GradDesc_GradientDescentSumaCuadrados', PACKAGE = 'GradDesc', A, b)
 }
 
