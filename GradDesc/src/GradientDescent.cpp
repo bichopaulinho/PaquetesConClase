@@ -15,10 +15,8 @@ using namespace Rcpp;
 //' @param A Matriz con regresores
 //' @param b Vector objetivo
 //'
-//' @detail
 //'
 //' @export
-//' @useDynLib GradDesc
 // [[Rcpp::export]]
 Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A,SEXP b) {
 

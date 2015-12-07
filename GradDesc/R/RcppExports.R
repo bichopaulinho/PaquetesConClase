@@ -6,10 +6,8 @@
 #' @param A Matriz con regresores
 #' @param b Vector objetivo
 #'
-#' @detail
 #'
 #' @export
-#' @useDynLib GradDesc
 GradientDescentSumaCuadrados <- function(A, b) {
     .Call('GradDesc_GradientDescentSumaCuadrados', PACKAGE = 'GradDesc', A, b)
 }

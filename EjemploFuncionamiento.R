@@ -10,6 +10,11 @@ GradientDescentSumaCuadrados(A,y)
 y_matrix =matrix(y,ncol=1)
 solve(t(A)%*%A,t(A)%*%y_matrix)
 
+# Ejemplo 1b) Modulo
+
+# Usando el modulo
+obj = new(GradientDescentSumaCuadradosClase,A,y)
+obj$solve()
 
 # Ejemplo 2: Regresión con datos Iris
 head(iris)
