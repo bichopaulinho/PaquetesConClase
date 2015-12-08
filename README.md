@@ -17,5 +17,8 @@ install.packages(dependencias)
 # Para generar los archivos de ejemplo:
 library(rmarkdown)
 rmarkdown::render("EjemploFuncionamiento.R")
+
+# Para instalar la versión autocontenida del paquete:
+devtools::install_github('bichopaulinho/PaquetesConClase',subdir='GradDescAutocontenido')
 ```
 
