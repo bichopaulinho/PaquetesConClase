@@ -1,0 +1,63 @@
+---
+title: "Paquetes con C++lase"
+author: "Gonzalo Mateo & Paulino Tardaguila"
+date: "10 de diciembre de 2015"
+output: ioslides_presentation
+smaller: yes
+---
+
+## Paquetes con Clase
+
+![cristina](https://media.giphy.com/media/z0KFEWjSd6UTK/giphy.gif)
+
+### R y C++?
+
+- Generalmente "acelerador" de funciones: recodificacion en un lenguaje mas veloz
+- Lo realmente potente: Extension de R, integracion de codigo externo
+
+
+## En el mundo real
+
+
+
+## Interfaz al instante
+
+Necesitamos:
+
+- Libreria con objetos de C++ que queremos integrar
+- Funcion en R que use los objetos anteriores como queremos.
+- R, Rcpp y RStudio
+- ...y alguien que sepa C++ cerca
+
+
+
+## Nuestro caso: Gradient Descent con Purple
+
+- Integraremos el algoritmo de optimizacion 'Gradient Descent' (implementacion sencilla: libreria [Purple](http://www.cimne.com/purple/)) 
+- Aplicacion al problema de regresion lineal multiple 
+- Resultado: funcion contenida en un paquete (**GradDesc**)
+
+## Funcion objetivo. Esquema
+
+### GradientDescent.cpp (Rcpp)
+
+```{c++,eval=FALSE,}
+Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A,SEXP b) {
+
+    Purple::Vector<double> M_b = Rcpp::as<Purple::Vector<double>>(b);
+    Purple::Matrix<double> M_A = Rcpp::as<Purple::Matrix<double>>(A);
+    
+    //....
+    return(Rcpp::wrap<Purple::Vector<double>>(minimalArgument));
+}
+```
+- Argumentos de entrada: `SEXP A,SEXP b`. Objetos de R (Matriz y vector)
+- Transformacion en objetos de la clase **Purple**: `Purple::Vector` y `Purple::Matrix`: Especializacion de la plantilla de `Rcpp::as`. Se define en **purple_wrappers.cpp**
+- Creación objeto función objetivo, algoritmo de optimización, parámetros, ejecución, etc. 
+- Salida: parámetros optimizados (objeto R) mediante especialización a medida de `Rcpp::wrap`
+
+
+## Funcion objetivo. Esquema (II)
+
+
+
