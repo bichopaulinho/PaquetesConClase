@@ -79,111 +79,29 @@ img {
 <h4 class="date"><em>Madrid, 9 de diciembre de 2015</em></h4>
 </div>
 
-<div id="TOC">
-<ul>
-<li><a href="#conjunto-de-ejemplos-de-funcionamiento-del-paquete">Conjunto de Ejemplos de funcionamiento del paquete</a><ul>
-<li><a href="#ejemplo-1">Ejemplo 1</a></li>
-<li><a href="#ejemplo-2">Ejemplo 2</a></li>
-<li><a href="#ejemplo-3-regresion-con-datos-iris">Ejemplo 3: Regresión con datos Iris</a></li>
-</ul></li>
-</ul>
-</div>
 
-<div id="conjunto-de-ejemplos-de-funcionamiento-del-paquete" class="section level2">
-<h2>Conjunto de Ejemplos de funcionamiento del paquete</h2>
-<p>El sitio ideal para estos ejemplos son las <code>vignettes</code> dentro del paquete. ¿<a href="http://r-pkgs.had.co.nz/vignettes.html">Como añadir vignettes a tu paquete</a>?.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">browseVignettes</span>(<span class="st">&quot;GradDesc&quot;</span>)</code></pre>
-<div id="ejemplo-1" class="section level3">
-<h3>Ejemplo 1</h3>
-<p>Aplicamos la formula de minimos cuadrados. Comprobamos que obtenemos los mismos resultados</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(GradDesc)
-m=<span class="dv">5</span>
-n=<span class="dv">2</span>
-A=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(m*n),<span class="dt">nrow=</span>m)
-y =<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>)
+<div id="script-de-instalacion" class="section level2">
+<h2>Script de Instalación</h2>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;devtools&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;roxygen2&quot;</span>)
+<span class="kw">library</span>(<span class="st">&quot;testthat&quot;</span>)
+<span class="kw">library</span>(Rcpp)
+<span class="co">#rm(list=ls())</span>
 
-xsol1 =<span class="st"> </span><span class="kw">GradientDescentSumaCuadrados</span>(A,y)
-xsol1</code></pre>
-<pre><code>## [1] -0.6486364  0.4259450</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">y_matrix =<span class="kw">matrix</span>(y,<span class="dt">ncol=</span><span class="dv">1</span>)
-xsol2 =<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(A)%*%A,<span class="kw">t</span>(A)%*%y_matrix)
-<span class="kw">t</span>(xsol2)</code></pre>
-<pre><code>##            [,1]     [,2]
-## [1,] -0.6486365 0.425945</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="kw">abs</span>(xsol1 -<span class="st"> </span><span class="kw">as.numeric</span>(xsol2)))&lt;<span class="fl">1e-6</span></code></pre>
-<pre><code>## [1] TRUE</code></pre>
-</div>
-<div id="ejemplo-2" class="section level3">
-<h3>Ejemplo 2</h3>
-<p>Usamos el <code>RCPP_MODULE</code>. Tenemos una clase RC de R <a href="http://adv-r.had.co.nz/OO-essentials.html#rc">(¿qué es eso?)</a> llamada <code>GradientDescentSumaCuadradosClase</code>. <code>Rcpp</code> nos ha generado esta clase de forma automática con la macro <code>RCPP_MODULE</code>.</p>
-<p>Con un objeto de esta clase vamos a cambiar el punto inicial y al llamar a <code>solve</code> (aplicar la optimización).</p>
-<p>Para mostrar el contenido de la clase:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">show</span>( GradientDescentSumaCuadradosClase )</code></pre>
-<pre><code>## C++ class 'GradientDescentSumaCuadradosClase' &lt;0x42dd820&gt;
-## Constructors:
-##     GradientDescentSumaCuadradosClase(SEXP, SEXP)
-## 
-## Fields: No public fields exposed by this class
-## 
-## Methods: 
-##      void setEvaluationGoal(double)  
-##            
-##      void setGradientNormGoal(double)  
-##            
-##      SEXP solve()  
-##            
-##      void starting_point(SEXP)  
-## </code></pre>
-<p>Creamos el objeto</p>
-<pre class="sourceCode r"><code class="sourceCode r">obj =<span class="st"> </span><span class="kw">new</span>(GradientDescentSumaCuadradosClase,A,y)
+<span class="co">#remove.packages(&quot;GradDesc&quot;,lib = .libPaths()[2])</span>
+<span class="co">#system(&quot;make&quot;)</span></code></pre>
+<p>Limpiamos todo para forzar a reinstalar</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system</span>(<span class="st">&quot;rm man/*.Rd*&quot;</span>)
 
-punto_inicial_alternativo =<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)
-obj$<span class="kw">starting_point</span>(punto_inicial_alternativo)</code></pre>
-<p>Podemos comprobar que realmente hemos cambiado el punto inicial en la evaluación inicial. (Esto solo sale en la consola de R)</p>
-<pre class="sourceCode r"><code class="sourceCode r">evaluacion_inicial =<span class="st"> </span><span class="kw">sum</span>((A%*%<span class="kw">matrix</span>(punto_inicial_alternativo,<span class="dt">nrow=</span><span class="dv">2</span>)-<span class="kw">matrix</span>(y,<span class="dt">ncol=</span><span class="dv">1</span>))^<span class="dv">2</span>)
-obj$<span class="kw">solve</span>()</code></pre>
-<pre><code>## [1] -0.6486365  0.4259451</code></pre>
-</div>
-<div id="ejemplo-3-regresion-con-datos-iris" class="section level3">
-<h3>Ejemplo 3: Regresión con datos Iris</h3>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(iris)</code></pre>
-<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-## 1          5.1         3.5          1.4         0.2  setosa
-## 2          4.9         3.0          1.4         0.2  setosa
-## 3          4.7         3.2          1.3         0.2  setosa
-## 4          4.6         3.1          1.5         0.2  setosa
-## 5          5.0         3.6          1.4         0.2  setosa
-## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(iris[,<span class="dv">2</span>:<span class="dv">4</span>])
-y &lt;-<span class="st"> </span>iris[,<span class="dv">1</span>]
-
-coefs &lt;-<span class="st"> </span><span class="kw">GradientDescentSumaCuadrados</span>(A,y)
-coefs</code></pre>
-<pre><code>## [1]  1.1210617  0.9235288 -0.8956758</code></pre>
-<p>usando función lm (quitamos el término independiente)</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(<span class="dt">data=</span>iris[,-<span class="dv">5</span>], <span class="dt">formula=</span>Sepal.Length~.-<span class="dv">1</span>)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = Sepal.Length ~ . - 1, data = iris[, -5])
-## 
-## Coefficients:
-##  Sepal.Width  Petal.Length   Petal.Width  
-##       1.1211        0.9235       -0.8957</code></pre>
-<p>Con término independiente: incluimos una columna de unos en la matriz del modelo</p>
-<pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">Interc=</span><span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">150</span>), A)
-coefs &lt;-<span class="st"> </span><span class="kw">GradientDescentSumaCuadrados</span>(A,y)
-coefs</code></pre>
-<pre><code>## [1]  1.8559957  0.6508376  0.7091322 -0.5564831</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lm</span>(<span class="dt">data=</span>iris[,-<span class="dv">5</span>], <span class="dt">formula=</span>Sepal.Length~.)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = Sepal.Length ~ ., data = iris[, -5])
-## 
-## Coefficients:
-##  (Intercept)   Sepal.Width  Petal.Length   Petal.Width  
-##       1.8560        0.6508        0.7091       -0.5565</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># TO DO. Ejemplo 3: Regresión de Eólica nacional España con datos de un grupo grande de parques (+500, +1000?) y control de tiempos</span></code></pre>
-</div>
+devtools::<span class="kw">clean_dll</span>()
+devtools::<span class="kw">clean_source</span>(<span class="st">&quot;src&quot;</span>)
+<span class="kw">document</span>(<span class="st">&quot;.&quot;</span>)</code></pre>
+<p>Generamos el objeto como binario (util para compartir el paquete. Evitamos que haya que recompilarlo por nuestros usuarios)</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">build</span>(<span class="st">&quot;.&quot;</span>, <span class="dt">binary=</span>T, <span class="dt">args=</span><span class="st">&quot;--no-multiarch&quot;</span>)</code></pre>
+<p>Para instalarlo basta esto porque el paquete ya esta descargado</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;../GradDesc_0.1_R_x86_64-redhat-linux-gnu.tar.gz&quot;</span>,
+                 <span class="dt">lib =</span> <span class="kw">.libPaths</span>()[<span class="dv">2</span>],<span class="co"># Para que lo instale en la libreria local</span>
+                 <span class="dt">repos =</span> <span class="ot">NULL</span>)</code></pre>
 </div>
 
 

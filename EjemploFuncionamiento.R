@@ -28,9 +28,11 @@ A=matrix(rnorm(m*n),nrow=m)
 y =c(2,3,2,1,1)
 
 xsol1 = GradientDescentSumaCuadrados(A,y)
+xsol1
 
 y_matrix =matrix(y,ncol=1)
 xsol2 = solve(t(A)%*%A,t(A)%*%y_matrix)
+t(xsol2)
 
 sum(abs(xsol1 - as.numeric(xsol2)))<1e-6
 
@@ -40,6 +42,11 @@ sum(abs(xsol1 - as.numeric(xsol2)))<1e-6
 #'
 #' Con un objeto de esta clase vamos a cambiar el punto inicial y al llamar a `solve` (aplicar la optimización).
 #'
+
+#' Para mostrar el contenido de la clase:
+show( GradientDescentSumaCuadradosClase )
+
+#' Creamos el objeto
 obj = new(GradientDescentSumaCuadradosClase,A,y)
 
 punto_inicial_alternativo = c(2,2)

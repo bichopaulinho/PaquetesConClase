@@ -26,6 +26,21 @@ NULL
 ##' }
 ##' @export
 ##' @examples
+##' #' Para mostrar el contenido del objeto
 ##' show( GradientDescentSumaCuadradosClase )
+##' #' Creamos el objeto
+##' m=5
+##' n=2
+##' A=matrix(rnorm(m*n),nrow=m)
+##' y =c(2,3,2,1,1)
+##'
+##' obj = new(GradientDescentSumaCuadradosClase,A,y)
+##'
+##' punto_inicial_alternativo = c(2,2)
+##' obj$starting_point(punto_inicial_alternativo)
+##'
+##' #' Podemos comprobar que realmente hemos cambiado el punto inicial en la evaluación inicial. (Esto solo sale en la consola de R)
+##' evaluacion_inicial = sum((A%*%matrix(punto_inicial_alternativo,nrow=2)-matrix(y,ncol=1))^2)
+##' obj$solve()
 NULL
 loadModule("ModuloSumaCuadrados",TRUE)
