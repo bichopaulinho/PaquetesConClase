@@ -5,7 +5,7 @@ author: "Gonzalo Mateo & Paulino Tardáguila"
 date: "Reunion Usuarios R Madrid - 10 de diciembre de 2015"
 output: 
   ioslides_presentation: 
-    smaller: yes
+    smaller: no
     widescreen: yes
 ---
 
@@ -20,9 +20,9 @@ output:
 
 
 ## En el mundo real
-
+<div class="centered">
  <img src="images/esquema_meteo.png" height="500px" width="700px" align="middle"/>
-
+</div>
 ## Interfaz al instante
 
 ### Ingredientes:
@@ -38,7 +38,7 @@ https://github.com/bichopaulinho/PaquetesConClase
 ## Nuestro caso: Regresión Múltiple usando Gradient Descent
 
 - Integraremos el algoritmo de optimización **Gradient Descent** (implementación sencilla: librería [Purple](http://www.cimne.com/purple/), ligeramente adaptada a nuestro problema)
-- Aplicacion al problema de regresion lineal multiple
+- Aplicación al problema de regresion lineal multiple
 - Resultado: función contenida en un paquete (**GradDesc**)
 
 ![purple](http://www.cimne.com/purple/img/CasCabeza.jpg)
@@ -86,8 +86,8 @@ Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A,SEXP b) {
 - Creación objeto función objetivo, algoritmo de optimización, parámetros, ejecución, etc. 
 - Salida: parámetros optimizados (objeto R) mediante especialización a medida de `Rcpp::wrap`
 
-## Exportación de Clases: RCPP_MODULE
-
+## Exportación de Clases: RCPP_MODULE {.smaller}
+ 
 - Macro RCPP_MODULE: permite exportar objetos directamente. Similar a `// [[Rcpp::export]]`
 - Muy útil para exportar clases completas (constructores, métodos, etc)
 - En **src/ModuloSumaCuadrados.cpp** definimos la clase *GradientDescentSumaCuadradosClase* y la exportamos como módulo:
@@ -109,28 +109,53 @@ RCPP_MODULE(ModuloSumaCuadrados){
 - Se carga al crear el paquete en **R/GradDesc.R**:
 `loadModule("ModuloSumaCuadrados",TRUE)`
 
-## Compilación
+## Compilación {.smaller}
 
-### Previo: Compilación de Purple
-- Es necesario? Recomendable para evitar problemas de compatibilidad con la tool-chain que compila los paquetes de R (sobre todo en Windows)
-- Con ayuda del fichero Makefile (Makefile.win): `make -f Makefile` 
+### Fuentes de Purple incluidos en src/
+- Ventaja: el paquete es "autocontenido". Es la forma habitual de distribución.
+- Incluir todos los cabeceros de la clase en un directorio "include" (dentro del directorio del paquete)
+- Las clases de la librería se compilan al instalar el paquete.
+- Compilación del paquete con Build tools (devtools, RStudio). Utiliza fichero Makevars (Makevars.win):
 
-### Compilación paquete GradDesc:
-- Build tools (devtools, RStudio). A través del fichero Makevars (Makevars.win):
+```{bash, eval=FALSE}
+## -*- mode: makefile; -*-
 
-```{r}
-readLines(file('GradDesc/src/Makevars'))
+### <b>
+PKG_CXXFLAGS=-I../inst/include
+### </b>
+## With R 3.1.0 or later, you can uncomment the following line to tell R to
+## enable compilation with C++11 (where available)
+CXX_STD = CXX11
+
 ```
+
+## Compilación: Otra alternativa {.smaller}
+
+### Purple como librería externa
+- Ventaja: obtenemos la librería externa de su ubicación original (integración continua)
+- Se enlaza al compilar el paquete referenciandola en en el Makevars (PKG_LIBS)
+```{bash, eval=FALSE}
+## -*- mode: makefile; -*-
+### <b>
+PKG_CXXFLAGS=-I../../Purple
+PKG_LIBS=-L../../lib -lPurple
+### </b>
+## With R 3.1.0 or later, you can uncomment the following line to tell R to
+## enable compilation with C++11 (where available)
+CXX_STD = CXX11
+```
+- Previamente hay que compilar Purple. Es necesario? Recomendable para evitar problemas de compatibilidad con la tool-chain que compila los paquetes de R (sobre todo en Windows)
+- Con ayuda del fichero Makefile (Makefile.win): `make -f Makefile` 
 
 ## La hora de la verdad
 
 Estimación de coeficientes de regresión por Gradient Descent vs OLS
 
-```{r, eval=FALSE}
+```{r}
 library(GradDesc)
 head(iris)
 ```
-```{r, eval=FALSE}
+```{r}
 A <- as.matrix(iris[,2:4])
 y <- iris[,1]
 ```
@@ -138,17 +163,22 @@ y <- iris[,1]
 
 Estimación de coeficientes de regresión por Gradient Descent vs OLS
 
-```{r, eval=FALSE}
+```{r}
 coefs <- GradientDescentSumaCuadrados(A,y)
 # Usando función lm (quitamos el término independiente)
 lm(data=iris[,-5], formula=Sepal.Length~.-1)
+round(coefs,4)
 ```
-```{r, eval=FALSE}
+## La hora de la verdad
+
+Estimación de coeficientes de regresión por Gradient Descent vs OLS
+
+```{r}
 # Con término independiente: incluimos una columna de unos en la matriz del modelo
-A <- cbind(Interc=rep(1,150), A)
+A <- cbind(Interc=rep(1,nrow(A)), A)
 coefs <- GradientDescentSumaCuadrados(A,y)
-coefs
 lm(data=iris[,-5], formula=Sepal.Length~.)
+round(coefs,4)
 ```
 
 
