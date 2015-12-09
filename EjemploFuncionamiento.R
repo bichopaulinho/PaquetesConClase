@@ -74,5 +74,5 @@ lm(data=iris[,-5], formula=Sepal.Length~.)
 
 
 # TO DO. Ejemplo 3: Regresión de Eólica nacional España con datos de un grupo grande de parques (+500, +1000?) y control de tiempos
-
-
+#' Información ejecución
+devtools::session_info()
