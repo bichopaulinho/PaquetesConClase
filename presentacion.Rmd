@@ -1,9 +1,12 @@
 ---
 title: "Paquetes con C++lase"
-author: "Gonzalo Mateo & Paulino Tardaguila"
-date: "10 de diciembre de 2015"
-output: ioslides_presentation
-smaller: yes
+subtitle: "Crash Course de Interfaces de C++ en R"
+author: "Gonzalo Mateo & Paulino Tardáguila"
+date: "Reunion Usuarios R Madrid - 10 de diciembre de 2015"
+output: 
+  ioslides_presentation: 
+    smaller: yes
+    widescreen: yes
 ---
 
 ## Paquetes con Clase
@@ -12,30 +15,39 @@ smaller: yes
 
 ### R y C++?
 
-- Generalmente "acelerador" de funciones: recodificacion en un lenguaje mas veloz
-- Lo realmente potente: Extension de R, integracion de codigo externo
+- Generalmente C++ como "acelerador" de funciones de R: recodificación en un lenguaje más veloz
+- Lo realmente potente: Extensión de R e **integración de código externo**
 
 
 ## En el mundo real
 
-
+ <img src="images/esquema_meteo.png" height="500px" width="700px" align="middle"/>
 
 ## Interfaz al instante
 
-Necesitamos:
+### Ingredientes:
 
-- Libreria con objetos de C++ que queremos integrar
-- Funcion en R que use los objetos anteriores como queremos.
-- R, Rcpp y RStudio
-- ...y alguien que sepa C++ cerca
+- Librería con objetos de C++ que queremos integrar
+- Función en R que use los objetos anteriores como queremos.
+- R, Rcpp y RStudio. (*thx Hadley, thx Dirk*)
+- (un poquito de C++ *programming skills*)
+
+https://github.com/bichopaulinho/PaquetesConClase
 
 
+## Nuestro caso: Regresión Múltiple usando Gradient Descent
 
-## Nuestro caso: Gradient Descent con Purple
+- Integraremos el algoritmo de optimización **Gradient Descent** (implementación sencilla: librería [Purple](http://www.cimne.com/purple/), ligeramente adaptada a nuestro problema)
+- Aplicacion al problema de regresion lineal multiple
+- Resultado: función contenida en un paquete (**GradDesc**)
 
-- Integraremos el algoritmo de optimizacion 'Gradient Descent' (implementacion sencilla: libreria [Purple](http://www.cimne.com/purple/)) 
-- Aplicacion al problema de regresion lineal multiple 
-- Resultado: funcion contenida en un paquete (**GradDesc**)
+![purple](http://www.cimne.com/purple/img/CasCabeza.jpg)
+ 
+
+```{r}
+print(list.files('GradDesc/src', pattern = '*\\.cpp'))
+```
+
 
 ## Funcion objetivo. Esquema
 
@@ -43,21 +55,108 @@ Necesitamos:
 
 ```{c++,eval=FALSE,}
 Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A,SEXP b) {
-
+    ### <b>
     Purple::Vector<double> M_b = Rcpp::as<Purple::Vector<double>>(b);
     Purple::Matrix<double> M_A = Rcpp::as<Purple::Matrix<double>>(A);
-    
+    ### </b>
     //....
     return(Rcpp::wrap<Purple::Vector<double>>(minimalArgument));
 }
 ```
 - Argumentos de entrada: `SEXP A,SEXP b`. Objetos de R (Matriz y vector)
-- Transformacion en objetos de la clase **Purple**: `Purple::Vector` y `Purple::Matrix`: Especializacion de la plantilla de `Rcpp::as`. Se define en **purple_wrappers.cpp**
+- Se transforman en objetos de la clase **Purple**: `Purple::Vector` y `Purple::Matrix`: Especializacion de la plantilla de `Rcpp::as`. Se define en **purple_wrappers.cpp**
+
+## Funcion objetivo. Esquema (II)
+
+### GradientDescent.cpp (Rcpp)
+
+```{c++2,eval=FALSE,}
+Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A,SEXP b) {
+
+    Purple::Vector<double> M_b = Rcpp::as<Purple::Vector<double>>(b);
+    Purple::Matrix<double> M_A = Rcpp::as<Purple::Matrix<double>>(A);
+    
+    //....
+    ### <b>
+    return(Rcpp::wrap<Purple::Vector<double>>(minimalArgument));
+    ### </b>
+}
+```
+
 - Creación objeto función objetivo, algoritmo de optimización, parámetros, ejecución, etc. 
 - Salida: parámetros optimizados (objeto R) mediante especialización a medida de `Rcpp::wrap`
 
+## Exportación de Clases: RCPP_MODULE
 
-## Funcion objetivo. Esquema (II)
+- Macro RCPP_MODULE: permite exportar objetos directamente. Similar a `// [[Rcpp::export]]`
+- Muy útil para exportar clases completas (constructores, métodos, etc)
+- En **src/ModuloSumaCuadrados.cpp** definimos la clase *GradientDescentSumaCuadradosClase* y la exportamos como módulo:
+```{c++3, eval=FALSE}
+RCPP_MODULE(ModuloSumaCuadrados){
+    using namespace Rcpp;
+
+    class_<GradientDescentSumaCuadradosClase>( "GradientDescentSumaCuadradosClase" )
+
+    .constructor<SEXP,SEXP>()
+
+    .method( "solve", &GradientDescentSumaCuadradosClase::getMinimalArgument )
+    .method( "setGradientNormGoal", &GradientDescentSumaCuadradosClase::setGradientNormGoal )
+    .method( "setEvaluationGoal", &GradientDescentSumaCuadradosClase::setEvaluationGoal )
+    .method( "starting_point", &GradientDescentSumaCuadradosClase::setInitialArgument )
+    ;
+}
+```
+- Se carga al crear el paquete en **R/GradDesc.R**:
+`loadModule("ModuloSumaCuadrados",TRUE)`
+
+## Compilación
+
+### Previo: Compilación de Purple
+- Es necesario? Recomendable para evitar problemas de compatibilidad con la tool-chain que compila los paquetes de R (sobre todo en Windows)
+- Con ayuda del fichero Makefile (Makefile.win): `make -f Makefile` 
+
+### Compilación paquete GradDesc:
+- Build tools (devtools, RStudio). A través del fichero Makevars (Makevars.win):
+
+```{r}
+readLines(file('GradDesc/src/Makevars'))
+```
+
+## La hora de la verdad
+
+Estimación de coeficientes de regresión por Gradient Descent vs OLS
+
+```{r, eval=FALSE}
+library(GradDesc)
+head(iris)
+```
+```{r, eval=FALSE}
+A <- as.matrix(iris[,2:4])
+y <- iris[,1]
+```
+## La hora de la verdad
+
+Estimación de coeficientes de regresión por Gradient Descent vs OLS
+
+```{r, eval=FALSE}
+coefs <- GradientDescentSumaCuadrados(A,y)
+# Usando función lm (quitamos el término independiente)
+lm(data=iris[,-5], formula=Sepal.Length~.-1)
+```
+```{r, eval=FALSE}
+# Con término independiente: incluimos una columna de unos en la matriz del modelo
+A <- cbind(Interc=rep(1,150), A)
+coefs <- GradientDescentSumaCuadrados(A,y)
+coefs
+lm(data=iris[,-5], formula=Sepal.Length~.)
+```
+
+
+
+
+
+
+
 
 
 
