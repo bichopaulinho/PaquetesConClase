@@ -24,6 +24,7 @@ browseVignettes("GradDesc")
 library(GradDesc)
 m=5
 n=2
+set.seed(22106)
 A=matrix(rnorm(m*n),nrow=m)
 y =c(2,3,2,1,1)
 

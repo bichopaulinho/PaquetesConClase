@@ -3,4 +3,4 @@
 export(GradientDescentSumaCuadrados)
 export(GradientDescentSumaCuadradosClase)
 import(Rcpp)
-useDynLib(GradDescAutocontenido)
+useDynLib(GradDesc)

@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // GradientDescentSumaCuadrados
 Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A, SEXP b);
-RcppExport SEXP GradDescAutocontenido_GradientDescentSumaCuadrados(SEXP ASEXP, SEXP bSEXP) {
+RcppExport SEXP GradDesc_GradientDescentSumaCuadrados(SEXP ASEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;

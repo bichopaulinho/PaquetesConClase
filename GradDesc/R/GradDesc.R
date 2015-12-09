@@ -2,11 +2,11 @@
 ##'
 ##' La documentacion de la clase \code{GradientDescentSumaCuadradosClase} está en: \code{\link{GradientDescentSumaCuadradosClase}}
 ##'
-##' @name GradDescAutocontenido-package
+##' @name GradDesc-package
 ##' @docType package
-##' @useDynLib GradDescAutocontenido
+##' @useDynLib GradDesc
 ##' @import Rcpp
-##' @title GradDescAutocontenido
+##' @title GradDesc
 ##' @author Gonzalo Mateo, Paulino Tardáguila
 NULL
 

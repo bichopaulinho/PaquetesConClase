@@ -21,7 +21,6 @@ library(Rcpp)
 #rm(list=ls())
 
 #remove.packages("GradDesc",lib = .libPaths()[2])
-#system("make")
 
 #' Limpiamos todo para forzar a reinstalar
 #+ eval=FALSE

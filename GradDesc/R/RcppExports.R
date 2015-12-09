@@ -9,6 +9,6 @@
 #'
 #' @export
 GradientDescentSumaCuadrados <- function(A, b) {
-    .Call('GradDescAutocontenido_GradientDescentSumaCuadrados', PACKAGE = 'GradDescAutocontenido', A, b)
+    .Call('GradDesc_GradientDescentSumaCuadrados', PACKAGE = 'GradDesc', A, b)
 }
 

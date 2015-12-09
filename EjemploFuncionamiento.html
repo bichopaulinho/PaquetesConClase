@@ -99,17 +99,18 @@ img {
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(GradDesc)
 m=<span class="dv">5</span>
 n=<span class="dv">2</span>
+<span class="kw">set.seed</span>(<span class="dv">22106</span>)
 A=<span class="kw">matrix</span>(<span class="kw">rnorm</span>(m*n),<span class="dt">nrow=</span>m)
 y =<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>)
 
 xsol1 =<span class="st"> </span><span class="kw">GradientDescentSumaCuadrados</span>(A,y)
 xsol1</code></pre>
-<pre><code>## [1] -1.5982718 -0.3746245</code></pre>
+<pre><code>## [1] 1.512341 1.310773</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">y_matrix =<span class="kw">matrix</span>(y,<span class="dt">ncol=</span><span class="dv">1</span>)
 xsol2 =<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t</span>(A)%*%A,<span class="kw">t</span>(A)%*%y_matrix)
 <span class="kw">t</span>(xsol2)</code></pre>
-<pre><code>##           [,1]       [,2]
-## [1,] -1.598272 -0.3746245</code></pre>
+<pre><code>##          [,1]     [,2]
+## [1,] 1.512341 1.310773</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(<span class="kw">abs</span>(xsol1 -<span class="st"> </span><span class="kw">as.numeric</span>(xsol2)))&lt;<span class="fl">1e-6</span></code></pre>
 <pre><code>## [1] TRUE</code></pre>
 </div>
@@ -119,7 +120,7 @@ xsol2 =<span class="st"> </span><span class="kw">solve</span>(<span class="kw">t
 <p>Con un objeto de esta clase vamos a cambiar el punto inicial y al llamar a <code>solve</code> (aplicar la optimización).</p>
 <p>Para mostrar el contenido de la clase:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">show</span>( GradientDescentSumaCuadradosClase )</code></pre>
-<pre><code>## C++ class 'GradientDescentSumaCuadradosClase' &lt;0x55a54346c8b0&gt;
+<pre><code>## C++ class 'GradientDescentSumaCuadradosClase' &lt;0x1be8e30&gt;
 ## Constructors:
 ##     GradientDescentSumaCuadradosClase(SEXP, SEXP)
 ## 
@@ -142,7 +143,7 @@ obj$<span class="kw">starting_point</span>(punto_inicial_alternativo)</code></pr
 <p>Podemos comprobar que realmente hemos cambiado el punto inicial en la evaluación inicial. (Esto solo sale en la consola de R)</p>
 <pre class="sourceCode r"><code class="sourceCode r">evaluacion_inicial =<span class="st"> </span><span class="kw">sum</span>((A%*%<span class="kw">matrix</span>(punto_inicial_alternativo,<span class="dt">nrow=</span><span class="dv">2</span>)-<span class="kw">matrix</span>(y,<span class="dt">ncol=</span><span class="dv">1</span>))^<span class="dv">2</span>)
 obj$<span class="kw">solve</span>()</code></pre>
-<pre><code>## [1] -1.5982718 -0.3746245</code></pre>
+<pre><code>## [1] 1.512341 1.310773</code></pre>
 </div>
 <div id="ejemplo-3-regresion-con-datos-iris" class="section level3">
 <h3>Ejemplo 3: Regresión con datos Iris</h3>
@@ -191,8 +192,8 @@ coefs</code></pre>
 ##  ui       X11                         
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
-##  tz       Europe/Madrid               
-##  date     2015-12-08                  
+##  tz       GMT                         
+##  date     2015-12-09                  
 ## 
 ##  package   * version date       source        
 ##  codetools   0.2-14  2015-07-15 CRAN (R 3.2.2)
@@ -200,7 +201,7 @@ coefs</code></pre>
 ##  digest      0.6.8   2014-12-31 CRAN (R 3.2.2)
 ##  evaluate    0.8     2015-09-18 CRAN (R 3.2.2)
 ##  formatR     1.2.1   2015-09-18 CRAN (R 3.2.2)
-##  GradDesc  * 0.1     2015-12-08 local         
+##  GradDesc  * 0.1     2015-12-09 local         
 ##  htmltools   0.2.6   2014-09-08 CRAN (R 3.2.2)
 ##  knitr       1.11    2015-08-14 CRAN (R 3.2.2)
 ##  magrittr    1.5     2014-11-22 CRAN (R 3.2.2)

@@ -19,6 +19,6 @@ library(rmarkdown)
 rmarkdown::render("EjemploFuncionamiento.R")
 
 # Para instalar la versión autocontenida del paquete:
-devtools::install_github('bichopaulinho/PaquetesConClase',subdir='GradDescAutocontenido')
+devtools::install_github('bichopaulinho/PaquetesConClase',subdir='GradDesc')
 ```
 
