@@ -263,8 +263,9 @@ CXX_STD = CXX11
 cat GradDesc/NAMESPACE
 ```
 
-- Si nos da un pete feo R al ejecutar el paquete: `R -f script_que_peta.R -d valgrind` [referencia](http://kevinushey.github.io/blog/2015/04/05/debugging-with-valgrind/)
-- Stackoverflow, lista Rcpp-devel
+- Si tenemos algún memory leak: `R -f script_que_peta.R -d valgrind` [ref](http://kevinushey.github.io/blog/2015/04/05/debugging-with-valgrind/)
+- Si queremos debbugear con `gdb`: `R --debugger=gdb` [ref](http://r-pkgs.had.co.nz/src.html#src-debugging)
+- Pedir socorro: Stackoverflow, lista Rcpp-devel, lista **R-es**.
 
 ## Referencias
 - Viñetas de Rcpp: modules, attributes, extending: `browseVignettes("Rcpp")`
