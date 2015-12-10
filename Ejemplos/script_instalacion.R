@@ -6,7 +6,7 @@
 #'  html_document:
 #'    theme: cerulean
 #'    highlight: tango
-#'    css: images/base.css
+#'    css: ../images/base.css
 #' ---
 
 #+ include=FALSE
