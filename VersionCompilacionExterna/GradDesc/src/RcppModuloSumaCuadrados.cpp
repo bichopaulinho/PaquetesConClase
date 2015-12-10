@@ -1,4 +1,4 @@
-#include "purple_wrappers.h"
+#include "Rcpp_purple_wrappers.h"
 #include <Rcpp.h>
 #include "ObjectiveFunction/SumaCuadrados.h"
 #include "OptimizationAlgorithm/GradientDescent.h"
@@ -17,7 +17,7 @@ public:
 
         gradient_descent.setEvaluationGoal(0.0);
         gradient_descent.setGradientNormGoal(1.0e-6);
-        gradient_descent.setMaximumNumberOfIterations(100);
+        gradient_descent.setMaximumNumberOfIterations(1000);
         gradient_descent.setMaximumTime(1000.0);
 
         gradient_descent.setShowPeriod(10);

@@ -1,4 +1,4 @@
-#include "purple_wrappers.h"
+#include "Rcpp_purple_wrappers.h"
 #include <Rcpp.h>
 using namespace Rcpp;
 

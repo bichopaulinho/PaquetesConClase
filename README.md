@@ -6,6 +6,10 @@
 
 ### 10/12/2015 
 
+### Presentación
+
+El presente repositorio contiene la presentación `presentacion.html` y los 2 paquetes de ejemplo mencionados en ella. 
+
 ### Instalación y Dependencias
 
 Hay que tener instalado:
@@ -14,11 +18,12 @@ Hay que tener instalado:
 dependencias = c("Rcpp","roxygen2","devtools","rmarkdown","knitr")
 install.packages(dependencias)
 
-# Para generar los archivos de ejemplo:
-library(rmarkdown)
-rmarkdown::render("EjemploFuncionamiento.R")
-
 # Para instalar la versión autocontenida del paquete:
 devtools::install_github('bichopaulinho/PaquetesConClase',subdir='GradDesc')
+
+# Para generar los archivos de ejemplo:
+library(rmarkdown)
+rmarkdown::render("Ejemplos/EjemploFuncionamiento.R")
+
 ```
 

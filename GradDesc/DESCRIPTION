@@ -1,12 +1,12 @@
 Package: GradDesc
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Implementacion de ejemplo para Charla en el Grupo de Usuarios de R de Madrid.
 Version: 0.1
-Date: 2015-11-29
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Date: 2015-12-10
+Author: Gonzalo Mateo <gonzmg88@gmail.com>, Paulino Tardaguila <tardaguila@hotmail.com>
+Maintainer: Gonzalo Mateo <gonzmg88@gmail.com>, Paulino Tardaguila <tardaguila@hotmail.com>
+Description: Implementa llamadas al algoritmo Gradient Descent implementado en la libreria Purple.
+License: GNU
 LazyData: TRUE
 Imports:
     Rcpp (>= 0.11.5)
