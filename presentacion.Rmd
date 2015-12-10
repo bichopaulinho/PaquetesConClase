@@ -43,16 +43,20 @@ https://github.com/bichopaulinho/PaquetesConClase
 - Resultado: función contenida en un paquete (**GradDesc**)
 
 ![purple](http://www.cimne.com/purple/img/CasCabeza.jpg)
- 
 
-```{bash, echo=FALSE}
+```{r eval=FALSE}
+Rcpp::Rcpp.package.skeleton(name="GradDesc",path="/tmp")
+```
+ 
+```{bash echo=FALSE}
 tree GradDesc -L 1
 ```
 
-## Estructura del directorio src/
+## Estructura del directorio {.smaller}
 
-```{bash}
-tree GradDesc/src -P *.cpp
+```{bash, echo=FALSE}
+#tree GradDesc/src -P *.cpp
+tree GradDesc -I "*.o|*.so|*.Rproj|*.Rd|*.h"
 ```
 
 
@@ -61,6 +65,7 @@ tree GradDesc/src -P *.cpp
 ### RcppGradientDescent.cpp (Rcpp)
 
 ```{c++,eval=FALSE,}
+// [[Rcpp::export]]
 Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A,SEXP b) {
     ### <b>
     Purple::Vector<double> M_b = Rcpp::as<Purple::Vector<double>>(b);
@@ -78,6 +83,7 @@ Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A,SEXP b) {
 ### GradientDescent.cpp (Rcpp)
 
 ```{c++2,eval=FALSE,}
+// [[Rcpp::export]]
 Rcpp::NumericVector GradientDescentSumaCuadrados(SEXP A,SEXP b) {
 
     Purple::Vector<double> M_b = Rcpp::as<Purple::Vector<double>>(b);
@@ -119,7 +125,7 @@ Cómo funciona Rcpp:
 `RcppGradientDescent.cpp` ([[Rcpp::export]]) -> `src/RcppExports.cpp` -> `R/RcppExports.R` (Función en R) 
 
 ```{r eval=FALSE}
-build(".", binary=T, args="--no-multiarch")
+devtools::install(".", args="--no-multiarch")
 ```
 
 
@@ -136,7 +142,7 @@ head(iris)
 A <- as.matrix(iris[,2:4])
 y <- iris[,1]
 ```
-## La hora de la verdad
+## La hora de la verdad (II)
 
 Estimación de coeficientes de regresión por Gradient Descent vs OLS
 
@@ -147,7 +153,7 @@ names(coefs) <- colnames(A)
 lm(data=iris[,-5], formula=Sepal.Length~.-1)$coefficients
 coefs
 ```
-## La hora de la verdad
+## La hora de la verdad (III)
 
 Estimación de coeficientes de regresión por Gradient Descent vs OLS
 
@@ -161,12 +167,38 @@ coefs
 ```
 
 
-## Extra: Exportación de Clases con RCPP_MODULE {.smaller}
+## Extra: RCPP_MODULE {.smaller}
  
-- Macro RCPP_MODULE: permite exportar objetos directamente. Similar a `// [[Rcpp::export]]`
+- Macro `RCPP_MODULE`: permite exportar objetos directamente. Similar a `// [[Rcpp::export]]`
 - Muy útil para exportar clases completas (constructores, métodos, etc)
-- En **src/ModuloSumaCuadrados.cpp** definimos la clase *GradientDescentSumaCuadradosClase* y la exportamos como módulo:
+- En **src/ModuloSumaCuadrados.cpp** definimos la clase *GradientDescentSumaCuadradosClase* 
+```{c++4, eval=FALSE}
+class GradientDescentSumaCuadradosClase {
+    public:
+        GradientDescentSumaCuadradosClase(SEXP A, SEXP y){
+            //...
+        }
+        SEXP getMinimalArgument(){
+            return Rcpp::wrap<Purple::Vector<double>>(gradient_descent.getMinimalArgument());
+        }
+        void setInitialArgument(SEXP vect_inicial){
+            gradient_descent.setInitialArgument(Rcpp::as<Purple::Vector<double>>(vect_inicial));
+        }
+        //...
+    private:
+        Purple::GradientDescent gradient_descent;
+        //...
+    
+};
+```
+
+
+## Extra: RCPP_MODULE (II) {.smaller}
+- La exportamos como módulo. En **src/ModuloSumaCuadrados.cpp**:
 ```{c++3, eval=FALSE}
+class GradientDescentSumaCuadradosClase{
+    //...
+};
 RCPP_MODULE(ModuloSumaCuadrados){
     using namespace Rcpp;
 
@@ -181,8 +213,27 @@ RCPP_MODULE(ModuloSumaCuadrados){
     ;
 }
 ```
-- Se carga al crear el paquete en **R/GradDesc.R**:
+
+
+- Hay que añadir en `DESCRIPTION` :  `RcppModules: ModuloSumaCuadrados`
+- Hay que establecer un punto de carga en un archivo **.R**: `R/GradDesc.R`:
 `loadModule("ModuloSumaCuadrados",TRUE)`
+
+## Extra: RCPP_MODULE (III) {.smaller}
+
+`RCPP_MODULE` crea una [clase S4 de R](http://adv-r.had.co.nz/OO-essentials.html#s4).
+```{r}
+obj = new(GradientDescentSumaCuadradosClase,A,y)
+
+punto_inicial_alternativo = c(1,-1,-2,1)
+obj$starting_point(punto_inicial_alternativo)
+
+coefs2 = obj$solve()
+names(coefs2)<-colnames(A)
+coefs2
+lm(data=iris[,-5], formula=Sepal.Length~.)$coefficients
+```
+
 
 ## Extra: Otra alternativa de Compilación {.smaller}
 
@@ -203,7 +254,29 @@ CXX_STD = CXX11
 - Con ayuda del fichero Makefile (Makefile.win): `make -f Makefile`
 - Disponible en `VersionCompilacionExterna/`
 
+## Problemas Frecuentes {.smaller}
+- A veces no recompila los archivos. Usar: `devtools::clean_dll(); devtools::clean_source()`
+- Borrar los archivos `R/RcppExport.R` y `src/RcppExport.cpp`
+- Si usamos `roxygen2` revisar el `NAMESPACE`. Tiene que tener:
 
+```{bash, echo=FALSE}
+cat GradDesc/NAMESPACE
+```
+
+- Si nos da un pete feo R al ejecutar el paquete: `R -f script_que_peta.R -d valgrind` [referencia](http://kevinushey.github.io/blog/2015/04/05/debugging-with-valgrind/)
+- Stackoverflow, lista Rcpp-devel
+
+## Referencias
+- Viñetas de Rcpp: modules, attributes, extending: `browseVignettes("Rcpp")`
+- R packages de Hadley Wickham ([link a capítulo sobre código compilado](http://r-pkgs.had.co.nz/src.html))
+- [Librerías de R que usan C++ con Rcpp](http://dirk.eddelbuettel.com/code/rcpp.cranusers.html): destacadas: [`RStan`](https://github.com/stan-dev/stan), Hadley: `dplyr`, `tidyr`, `readr`, `RcppArmadillo`
+
+Otras presentaciones:
+
+- [Presentación interesante](http://es.slideshare.net/ajayohri/rcpp-51899116)
+- [Presentación François](http://www.slideshare.net/romainfrancois/rcpp-seemless-r-and-c-5381368)
+
+## MUCHAS GRACIAS!
 
 
 

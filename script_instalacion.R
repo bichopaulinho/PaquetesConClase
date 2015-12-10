@@ -37,5 +37,5 @@ build(".", binary=T, args="--no-multiarch")
 #' Para instalarlo basta esto porque el paquete ya esta descargado
 #+ eval=FALSE
 install.packages("../GradDesc_0.1_R_x86_64-redhat-linux-gnu.tar.gz",
-                 lib = .libPaths()[2],# Para que lo instale en la libreria local
+                 #lib = .libPaths()[2],# Para que lo instale en la libreria local
                  repos = NULL)

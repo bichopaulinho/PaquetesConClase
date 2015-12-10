@@ -1,4 +1,4 @@
-#include "purple_wrappers.h"
+#include "Rcpp_purple_wrappers.h"
 #include <Rcpp.h>
 #include "ObjectiveFunction/SumaCuadrados.h"
 #include "OptimizationAlgorithm/GradientDescent.h"
