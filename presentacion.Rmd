@@ -279,5 +279,6 @@ Otras presentaciones:
 
 ## MUCHAS GRACIAS!
 
-
-
+<div id="footer">
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Licencia de Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Paquetes Con C++lase</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://github.com/bichopaulinho/PaquetesConClase" property="cc:attributionName" rel="cc:attributionURL">Gonzalo Mateo & Paulino Tardáguila</a> is licensed under a<br> <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Reconocimiento-CompartirIgual 4.0 Internacional License</a>.<br />Creado a partir de la obra en <a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/bichopaulinho/PaquetesConClase" rel="dct:source">https://github.com/bichopaulinho/PaquetesConClase</a>.
+</div>
