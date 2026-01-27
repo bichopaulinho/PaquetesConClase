@@ -8,7 +8,7 @@
 
 ### Presentación
 
-El presente repositorio contiene la presentación [presentacion.html](https://rawgit.com/bichopaulinho/PaquetesConClase/master/presentacion.html) y los 2 paquetes de ejemplo mencionados en ella. 
+El presente repositorio contiene la presentación [presentacion.html](presentacion.html) y los 2 paquetes de ejemplo mencionados en ella. 
 
 ### Instalación y Dependencias
 
